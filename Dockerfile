@@ -3,7 +3,6 @@ FROM node:alpine as build-stage
 WORKDIR /app
 COPY package.json /app
 RUN rm -rf node-modules/
-RUN rm package-lock.json
 RUN npm install
 RUN npm audit fix
 COPY ./ /app/
