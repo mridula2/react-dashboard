@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package.json /app
 RUN rm -rf node-modules/
 RUN npm install
+RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 COPY ./ /app/
 EXPOSE 3000
 RUN npm run build
