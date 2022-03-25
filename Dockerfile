@@ -4,7 +4,6 @@ WORKDIR /app
 COPY package.json /app
 RUN rm -rf node-modules/
 RUN npm install
-RUN npm audit fix
 COPY ./ /app/
 EXPOSE 3000
 RUN npm run build
