@@ -71,7 +71,7 @@ spec:
         container('nodejs') {
           echo sh(script: 'env|sort', returnStdout: true)
           sh """
-            npm install
+            npm run build
             """
         }
       }
