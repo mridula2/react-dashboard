@@ -1,16 +1,20 @@
-# Stage 0, "build-stage", based on Node.js, to build and compile the frontend
-FROM node:alpine as build-stage
+# pull official base image
+FROM node:14.18.1-alpine
+
+# set working directory
 WORKDIR /app
-COPY package.json /app
-RUN rm -rf node-modules/
-RUN npm install
-RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
-COPY ./ /app/
-EXPOSE 3000
-RUN npm run build
-# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
-FROM nginx:1.15
-EXPOSE 3000
-COPY --from=build-stage /app/build/ /usr/share/nginx/html
-# Copy the default nginx.conf provided by node:alpine
-COPY --from=build-stage /app/nginx.conf /etc/nginx/conf.d/default.conf
+
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm install --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+
+# add app
+COPY . ./
+
+# start app
+CMD ["npm", "start"]
